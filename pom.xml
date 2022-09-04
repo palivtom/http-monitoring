@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>cz.palivtom</groupId>
+	<artifactId>http-monitoring</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>http-monitoring</name>
+
+	<properties>
+		<java.version>17</java.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<spring-boot.verison>2.7.3</spring-boot.verison>
+
+		<openapi-generator-maven-plugin.version>6.0.1</openapi-generator-maven-plugin.version>
+		<springdoc-openapi-ui.version>1.6.11</springdoc-openapi-ui.version>
+		<lombok.version>1.18.24</lombok.version>
+		<mapstruct.version>1.5.2.Final</mapstruct.version>
+	</properties>
+
+	<dependencies>
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<!-- Database -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
+
+		<!-- OpenApi Docs -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>${springdoc-openapi-ui.version}</version>
+		</dependency>
+
+		<!-- Lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- Mapstruct -->
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>${mapstruct.version}</version>
+		</dependency>
+
+		<!-- Test -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring-boot.verison}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<!-- OpenAPI code generator -->
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>${openapi-generator-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>http-monitoring</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<generatorName>spring</generatorName>
+							<inputSpec>.openapi/http-monitoring.yml</inputSpec>
+							<apiPackage>${project.groupId}.httpmonitoring.api</apiPackage>
+							<modelPackage>${project.groupId}.httpmonitoring.model.dto</modelPackage>
+							<modelNameSuffix>Dto</modelNameSuffix>
+							<generateSupportingFiles>false</generateSupportingFiles>
+
+							<configOptions>
+								<title>http-monitoring</title>
+								<dateLibrary>java8-localdatetime</dateLibrary>
+								<interfaceOnly>true</interfaceOnly>
+								<serializationLibrary>jackson</serializationLibrary>
+								<openApiNullable>false</openApiNullable>
+								<skipDefaultInterface>true</skipDefaultInterface>
+							</configOptions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${spring-boot.verison}</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.10.1</version>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${lombok.version}</version>
+						</path>
+						<path>
+							<groupId>org.mapstruct</groupId>
+							<artifactId>mapstruct-processor</artifactId>
+							<version>${mapstruct.version}</version>
+						</path>
+					</annotationProcessorPaths>
+					<compilerArgs>
+						<compilerArg>-Amapstruct.defaultComponentModel=spring</compilerArg>
+					</compilerArgs>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

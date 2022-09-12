@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -13,7 +15,14 @@ import javax.persistence.Entity;
 @Entity(name = "users")
 public class User extends AbstractEntity<Long> {
 
-    //todo
+    @Column(name = "username", nullable = false)
+    private String username;
+
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+
+    @Column(name = "access_token", length = 36, nullable = false, unique = true)
+    private String accessToken = UUID.randomUUID().toString();
 
     @Override
     public boolean equals(Object o) {

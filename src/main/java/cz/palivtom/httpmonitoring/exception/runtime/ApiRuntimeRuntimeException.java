@@ -4,12 +4,12 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class ApiRuntimeException extends HttpMonitoringRuntimeException {
+public class ApiRuntimeRuntimeException extends HttpMonitoringRuntimeException {
 
     private final String title;
     private final HttpStatus httpStatus;
 
-    public ApiRuntimeException(HttpStatus httpStatus, String message, Object... parameters) {
+    public ApiRuntimeRuntimeException(HttpStatus httpStatus, String message, Object... parameters) {
         super(message, parameters);
         this.title = httpStatus.getReasonPhrase();
         this.httpStatus = httpStatus;

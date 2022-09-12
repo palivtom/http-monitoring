@@ -7,6 +7,8 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -23,6 +25,9 @@ public class User extends AbstractEntity<Long> {
 
     @Column(name = "access_token", length = 36, nullable = false, unique = true)
     private String accessToken = UUID.randomUUID().toString();
+
+    @OneToMany(mappedBy = "user")
+    private List<MonitoringEndpoint> monitoringEndpoints;
 
     @Override
     public boolean equals(Object o) {

@@ -4,16 +4,43 @@ import cz.palivtom.httpmonitoring.model.base.AbstractValidityEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.http.HttpMethod;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
 @ToString
-@Entity(name = "monitoring_endpoints")
+@Entity(name = "monitoring_endpoint")
+@Table(indexes = {
+        @Index(name = "idx_monitoringEndpoint_userId_createdAt", columnList = "user_id, created_at")
+})
 public class MonitoringEndpoint extends AbstractValidityEntity<Long> {
 
-    //todo
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Column(name = "url", length = 2048, nullable = false)
+    private String url;
+
+    @Column(name = "sec_interval", nullable = false)
+    private Integer interval;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "http_method", nullable = false)
+    private HttpMethod httpMethod = HttpMethod.GET;
+
+    @OneToMany(mappedBy = "monitoringEndpoint")
+    private List<MonitoringEndpointResponse> responses;
+
+    @Column(name = "checked_at", nullable = true)
+    private LocalDateTime checkedAt;
 
     @Override
     public boolean equals(Object o) {

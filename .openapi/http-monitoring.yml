@@ -4,13 +4,14 @@ info:
   title: Http Monitoring Service Specification
 
 tags:
-  - name: Monitoring Endpoint
+  - name: MonitoringEndpoint
+    description: Endpoints for monitoring other enpoint
 
 paths:
   /monitoringEndpoints:
     get:
       tags:
-        - Monitoring Endpoint
+        - MonitoringEndpoint
       summary: Get logged in user monitoring endpoints
       operationId: getMonitoringEndpoints
       parameters:
@@ -75,7 +76,7 @@ paths:
 
     post:
       tags:
-        - Monitoring Endpoint
+        - MonitoringEndpoint
       summary: Create monitoring endpoint for currently logged in user
       operationId: createMonitoringEndpoint
       requestBody:
@@ -85,7 +86,7 @@ paths:
             schema:
               $ref: '#/components/schemas/MonitoringEndpoint'
       responses:
-        '200':
+        '201':
           description: Returns created monitoring endpoint
           content:
             application/json:
@@ -103,7 +104,7 @@ paths:
   /monitoringEndpoints/{monitoringEndpointId}:
     get:
       tags:
-        - Monitoring Endpoint
+        - MonitoringEndpoint
       summary: Get monitoring endpoint by id
       operationId: getMonitoringEndpoint
       parameters:
@@ -131,7 +132,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     put:
       tags:
-        - Monitoring Endpoint
+        - MonitoringEndpoint
       summary: Edit monitoring endpoint
       operationId: editMonitoringEndpoint
       parameters:
@@ -166,7 +167,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     delete:
       tags:
-        - Monitoring Endpoint
+        - MonitoringEndpoint
       summary: Delete monitoring endpoint
       operationId: deleteMonitoringEndpoint
       parameters:
@@ -179,8 +180,12 @@ paths:
             format: int64
 
       responses:
-        '204':
-          description: Monitoring has been successfully deleted
+        '200':
+          description: Returns deleted monitoring endpoint
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonitoringEndpoint'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -248,6 +253,10 @@ components:
           type: integer
           format: int32
           example: 30
+        pagesOverAll:
+          type: integer
+          format: int32
+          example: 2
         page:
           type: integer
           format: int32
@@ -262,11 +271,11 @@ components:
         id:
           readOnly: true
           type: integer
-          format: int32
-        authorUsername:
+          format: int64
+        authorId:
           readOnly: true
-          type: string
-          example: palivtom
+          type: integer
+          format: int64
         title:
           type: string
           example: Seznam.cz down monitor
@@ -297,7 +306,7 @@ components:
         id:
           readOnly: true
           type: integer
-          format: int32
+          format: int64
         httpCode:
           readOnly: true
           type: integer

@@ -133,6 +133,7 @@
 								<serializationLibrary>jackson</serializationLibrary>
 								<openApiNullable>false</openApiNullable>
 								<skipDefaultInterface>true</skipDefaultInterface>
+								<useTags>true</useTags>
 							</configOptions>
 						</configuration>
 					</execution>

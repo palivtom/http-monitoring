@@ -3,18 +3,18 @@ package cz.palivtom.httpmonitoring.utils;
 import cz.palivtom.httpmonitoring.model.MonitoringEndpoint;
 import cz.palivtom.httpmonitoring.model.MonitoringEndpointResponse;
 import cz.palivtom.httpmonitoring.service.interfaces.MonitoringEndpointResponseService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * Runnable class calling requests thought {@link RestTemplate}. Results are saved by {@link MonitoringEndpointResponseService}
+ */
+@RequiredArgsConstructor
 public class MonitoringEndpointRestCall implements Runnable {
 
     private final MonitoringEndpointResponseService monitoringEndpointResponseService;
     private final MonitoringEndpoint monitoringEndpoint;
-
-    public MonitoringEndpointRestCall(MonitoringEndpointResponseService monitoringEndpointResponseService, MonitoringEndpoint monitoringEndpoint) {
-        this.monitoringEndpointResponseService = monitoringEndpointResponseService;
-        this.monitoringEndpoint = monitoringEndpoint;
-    }
 
     @Override
     public void run() {

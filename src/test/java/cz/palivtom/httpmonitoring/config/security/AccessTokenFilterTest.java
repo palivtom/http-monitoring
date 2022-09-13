@@ -39,7 +39,7 @@ class AccessTokenFilterTest {
     }
 
     @Test
-    void unauthorizedRequest_failedToken() throws Exception {
+    void secured_unauthorizedRequest_failedToken() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get(TESTING_ACCESS_TOKEN_PATH)
                         .header("accessToken", "doest-not-match-any")
                 )
@@ -48,13 +48,13 @@ class AccessTokenFilterTest {
     }
 
     @Test
-    void forbiddenRequest_anyFilterMatch() throws Exception {
+    void secured_forbiddenRequest_anyFilterMatch() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get(TESTING_ACCESS_TOKEN_PATH))
                 .andExpect(status().isForbidden());
     }
 
     @Test
-    void okRequest_authorized() throws Exception {
+    void secured_okRequest_authorized() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get(TESTING_ACCESS_TOKEN_PATH)
                         .header("accessToken", user.getAccessToken())
                 )

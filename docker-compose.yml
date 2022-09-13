@@ -25,4 +25,6 @@ services:
       MYSQL_USER: user_example # should be done secretly by some secret or env
       MYSQL_PASSWORD: password_example # should be done secretly by some secret or env
       MYSQL_DATABASE: http-monitoring
-      MYSQL_ALLOW_EMPTY_PASSWORD: true
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+#    volumes:
+#      - "./db_data:/var/lib/mysql"

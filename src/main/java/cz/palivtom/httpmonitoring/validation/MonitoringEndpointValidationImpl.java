@@ -10,8 +10,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -20,6 +23,7 @@ public class MonitoringEndpointValidationImpl implements MonitoringEndpointValid
 
     private static final int TITLE_MAX_LENGTH = 255;
     private static final int URL_MAX_LENGTH = 2048;
+    private static final int REACHABLE_REQUEST_TIMEOUT = 3;
 
     @Value("${server.host:localhost}")
     private String serverUrl;
@@ -97,6 +101,16 @@ public class MonitoringEndpointValidationImpl implements MonitoringEndpointValid
             }
         } catch (MalformedURLException e) {
             throw new ApiRuntimeRuntimeException(HttpStatus.BAD_REQUEST, "Invalid URL format.");
+        }
+
+        try {
+            if (!InetAddress.getByName(url).isReachable(REACHABLE_REQUEST_TIMEOUT)) {
+                throw new ApiRuntimeRuntimeException(HttpStatus.BAD_REQUEST, "Given URL is not reachable.");
+            }
+        } catch (UnknownHostException e) {
+            throw new ApiRuntimeRuntimeException(HttpStatus.BAD_REQUEST, "Given URL is unable to resolve.");
+        } catch (IOException e) {
+            throw new ApiRuntimeRuntimeException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to resolve given URL, an unknown error occurs.");
         }
     }
 }

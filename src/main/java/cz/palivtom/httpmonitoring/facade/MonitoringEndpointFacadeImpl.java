@@ -54,7 +54,7 @@ public class MonitoringEndpointFacadeImpl implements MonitoringEndpointFacade {
                 monitoringEndpointService.get(monitoringEndpointId)
         );
 
-        if (result != null && result.getResponses() != null) {
+        if (result != null) {
             result.responses(
                     monitoringEndpointResponseMapper.map(
                             monitoringEndpointResponseService.getTop10(result.getId())

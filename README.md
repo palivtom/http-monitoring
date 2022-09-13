@@ -1,11 +1,11 @@
 # http-monitoring
 
-App can monitor http[-s] GET endpoints without security in given interval
+The app can monitor http[-s] GET endpoints without security in a given interval
 
 ### Running the app through the IDE
 __Requirements: Running MySQL or using H2 one__
 
-1. Compile the app - In this app is used OpenApi code generator, without the generated classes is application unable to build and run
+1. Compile the app - This app uses an OpenApi code generator. Without generated classes is the application unable to build and run
    ```shell
    ./mvnw compile
    ```
@@ -29,4 +29,4 @@ After running the docker compose, you can see endpoints in a file living at `/.o
 **Default user access**
 Add this header to your requests: `accessToken: dcb20f8a-5657-4f1b-9f7f-ce65739b359e`.
 
-If any user is needed, put it to the database/create a flyway migration script.
+If any user is needed, put it in the database/create a flyway migration script.

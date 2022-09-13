@@ -23,7 +23,7 @@ public class MonitoringEndpointValidationImpl implements MonitoringEndpointValid
 
     private static final int TITLE_MAX_LENGTH = 255;
     private static final int URL_MAX_LENGTH = 2048;
-    private static final int REACHABLE_REQUEST_TIMEOUT = 3;
+    private static final int REACHABLE_REQUEST_TIMEOUT = 3000;
 
     @Value("${server.host:localhost}")
     private String serverUrl;
@@ -96,7 +96,12 @@ public class MonitoringEndpointValidationImpl implements MonitoringEndpointValid
         }
 
         try {
-            if (new URL(url).getHost().equals(serverUrl)) {
+            URL urlFormat = new URL(url);
+            if (!urlFormat.getProtocol().equals("http") && !urlFormat.getProtocol().equals("https")) {
+                throw new ApiRuntimeRuntimeException(HttpStatus.BAD_REQUEST, "Only 'http' and 'https' protocol is allowed.");
+            } else if (urlFormat.getHost().isEmpty()) {
+                throw new ApiRuntimeRuntimeException(HttpStatus.BAD_REQUEST, "Host cannot be empty.");
+            } else if (urlFormat.getHost().equals(serverUrl)) {
                 throw new ApiRuntimeRuntimeException(HttpStatus.METHOD_NOT_ALLOWED, "Given URL is pointing to service itself.");
             }
         } catch (MalformedURLException e) {
@@ -104,7 +109,7 @@ public class MonitoringEndpointValidationImpl implements MonitoringEndpointValid
         }
 
         try {
-            if (!InetAddress.getByName(url).isReachable(REACHABLE_REQUEST_TIMEOUT)) {
+            if (!InetAddress.getByName(new URL(url).getHost()).isReachable(REACHABLE_REQUEST_TIMEOUT)) {
                 throw new ApiRuntimeRuntimeException(HttpStatus.BAD_REQUEST, "Given URL is not reachable.");
             }
         } catch (UnknownHostException e) {
